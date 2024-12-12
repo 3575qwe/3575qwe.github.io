@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/7cb83bc021.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-image: url('18.jpg'); /* 배경 이미지 URL */
+            background-size: cover; /* 배경 이미지를 요소 크기에 맞게 조정 */
+            background-repeat: no-repeat; /* 배경 이미지 반복하지 않기 */
+            background-position: center; /* 배경 이미지를 중앙에 위치 */
+        }
+
+        .profile {
+            align-items: center; /* 이미지와 텍스트를 세로로 중앙 정렬 */
+            text-align: center;
+        }
+
+        .profile .profile-image {
+            margin-top: 30px;
+            width: 50px;  /* 이미지 크기 */
+            height: 50px; /* 이미지 크기 */
+            border-radius: 50%; /* 원형으로 만들기 */
+            margin-right: 10px; /* 이미지와 텍스트 간의 간격 */
+        }
+
+        #sidebar {
+            width: 240px;
+            height: 100vh;
+            background-color: rgb(0, 0, 0);
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #sidebar .profile {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #sidebar .subscribe-btn {
+            background-color: #ff0066;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #sidebar .menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar .menu li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+
+        #sidebar .menu li a {
+            color: rgb(255, 255, 255); /* 파란색으로 변경 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+
+        #main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        .top-banner {
+            background-color: rgba(255, 0, 102, 0.8);
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .highlight {
+            display: flex;
+            margin: 30px 30px 30px 30px;
+            background-color: rgba(34, 34, 34, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .highlight-image img {
+            width: 90%;
+            border-radius: 5px;
+        }
+
+        .highlight-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 20px; /* 이미지와 텍스트 간격 조정 */
+        }
+
+        .highlight-text .tag {
+            color: #ff0066;
+            font-weight: bold;
+        }
+
+        .highlight-text h1 {
+            margin: 10px 0;
+        }
+
+        .album-section {
+            margin: 50px;
+        }
+
+        .album-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .album-grid {
+            display: flex;
+            justify-content: space-between; /* 아이템들 사이에 여백 분배 */
+        }
+
+        .album-item {
+            text-align: center;
+        }
+
+        .album-item img {
+            width: 300px;
+            height: 300px;
+        }
+
+        .album-item .title {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .album-item .release-date {
+            font-size: 12px;
+            color: #ffffff;
+            margin-bottom: 50px;
+            text-align: left;
+        }
+
+        /* 하단 플레이어 바 */
+        .player-bar {
+            background-color: rgb(50, 50, 50);
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .player-bar .player-icon {
+            width: 50px;  /* 이미지 크기 */
+            height: 50px; /* 이미지 크기 */
+            margin-right: 30px; /* 이미지와 다른 요소 간 간격 */
+            margin-left: 10px;
+            border: 2px solid #ffffff;
+        }
+
+        .play-btn {
+            size: 200%;
+        }
+
+        /* 진한 구분선 */
+        .divider {
+            width: 2px;
+            height: 25px;
+            background-color: #444;
+        }
+
+        .fa-solid fa-circle-play {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* 재생바 */
+        .progress-container {
+            flex-grow: 1;
+            height: 5px;
+            background-color: #333;
+            border-radius: 5px;
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .progress-bar {
+            width: 40%; /* 진척도 (예시로 40% 설정) */
+            height: 100%;
+            background-color: #ff0066;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* 시간 표시 */
+        .time {
+            font-size: 12px;
+            color: #bbb;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 사이드 메뉴 -->
+    <nav id="sidebar">
+        <div class="profile">
+            <a href='index.html'><img src="1x/logo.png"></a>
+            <img src="profile.jpg" alt="김민서 프로필 이미지" class="profile-image">
+            <p>김민서 ▼</p>
+            <button class="subscribe-btn">마이페이지</button>
+        </div>
+        <ul class="menu">
+            <li><i class="fa-solid fa-trophy"></i>&ensp; <a href='look.html'>둘러보기</a></li>
+            <li><i class="fa-solid fa-music"></i>&ensp; <a href='reco.html'>추천</a></li>
+            <li><i class="fa-solid fa-snowflake"></i>&ensp; <a href='thema.html'>테마</a></li>
+            <li><i class="fa-solid fa-book"></i>&ensp; <a href='mag.html'>매거진</a></li>
+            <li><i class="fa-solid fa-heart"></i>&ensp; <a href='my.html'>마이뮤직</a></li>
+        </ul>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="main-content">
+        <header class="top-banner">
+            <p>♥MS Music과 함께라면 무한한 나의 음악세계♥</p>
+        </header>
+
+        <section class="highlight">
+            <div class="highlight-image">
+                <img src="main.jpg" alt="로제&브루노마스">
+            </div>
+            <div class="highlight-text">
+                <p class="tag">SPECIAL</p>
+                <h1>로제&브루노마스</h1>
+                <p>로제 X 브루노마스, 환상의 시너지 발산! 정규 1집 'rosie' 선공개 싱글 'APT.'</p>
+                <p class="date">MS MAG - 2024.12.04</p>
+            </div>
+        </section>
+
+        <section class="album-section">
+            <h2>이주의 음악</h2>
+            <div class="album-grid">
+                <div class="album-item">
+                    <img src="main1.png" alt="앨범 1">
+                    <p class="title">이주의 음악 #1: 나는 이즈나(izna)</p>
+                    <p class="release-date">2024.11.26</p>
+                </div>
+                <div class="album-item">
+                    <img src="main2.png" alt="앨범 2">
+                    <p class="title">이주의 음악 #2: 지드래곤</p>
+                    <p class="release-date">2024.11.04</p>
+                </div>
+                <div class="album-item">
+                    <img src="main3.png" alt="앨범 3">
+                    <p class="title">이주의 음악 #3: Oasis</p>
+                    <p class="release-date">2024.09.11</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 하단 재생바 -->
+    <footer class="player-bar">
+        <img src="apt.jpg" alt="재생바 이미지" class="player-icon">
+        <!-- 재생/일시정지 버튼 -->
+        &emsp;<i class="fa-solid fa-backward-step"></i>&emsp;
+        <i class="fa-solid fa-circle-play"></i>&emsp;
+        <i class="fa-solid fa-forward-step"></i>&emsp;&emsp;&emsp;
+
+        <!-- 진한 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 재생바 -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <!-- 시간 표시 -->
+        <div class="time">
+            <span>01:30</span> / <span>03:45</span>
+        </div>
+    </footer>
+</body>
+</html>
