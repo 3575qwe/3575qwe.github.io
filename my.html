@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/7cb83bc021.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-image: url('18.jpg'); /* 배경 이미지 URL */
+            background-size: cover; /* 배경 이미지를 요소 크기에 맞게 조정 */
+            background-repeat: no-repeat; /* 배경 이미지 반복하지 않기 */
+            background-position: center; /* 배경 이미지를 중앙에 위치 */
+        }
+
+        #sidebar {
+            width: 240px;
+            height: 100vh;
+            background-color: rgb(0, 0, 0);
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .profile {
+            align-items: center; /* 이미지와 텍스트를 세로로 중앙 정렬 */
+            text-align: center;
+        }
+
+        .profile .profile-image {
+            margin-top: 30px;
+            width: 50px;  /* 이미지 크기 */
+            height: 50px; /* 이미지 크기 */
+            border-radius: 50%; /* 원형으로 만들기 */
+            margin-right: 10px; /* 이미지와 텍스트 간의 간격 */
+        }
+
+        #sidebar .subscribe-btn {
+            background-color: #ff0066;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #sidebar .menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar .menu li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+
+        #sidebar .menu li a {
+            color: rgb(255, 255, 255); /* 파란색으로 변경 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+
+        /* '둘러보기' 메뉴 핑크색으로 적용 */
+        #sidebar .menu .menu-item-home a {
+            color: #ff0066; /* 핑크색 */
+            font-weight: 600; /* 살짝 두꺼운 글씨 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+
+
+        #main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        .top-banner {
+            background-color: rgba(255, 0, 102, 0.8);
+            height: 50px; /* 배너 높이를 고정 */
+            padding: 10px;
+            text-align: left;
+            font-size: 20px;
+        }
+
+        .highlight {
+            display: flex;
+            margin: 30px 30px 30px 30px;
+            background-color: rgba(34, 34, 34, 0.8);
+            padding: 0px;
+            border-radius: 10px;
+            height: 500px;
+        }
+
+        .highlight-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: -30px;
+        }
+
+        .album-section {
+            margin: 50px;
+        }
+
+        .album-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .album-grid {
+            display: flex;
+            justify-content: space-between; /* 아이템들 사이에 여백 분배 */
+            gap: 150px; /* 아이템들 사이에 간격을 추가 */
+            margin-left: 30px;
+        }
+
+        .album-item {
+    position: relative; /* 아이콘을 절대 위치로 올리기 위해 필요 */
+    text-align: center;
+    overflow: hidden; /* 이미지가 커질 때 넘치지 않게 설정 */
+}
+
+.album-item img {
+    width: 300px;
+    height: 300px;
+    transition: all 0.3s ease; /* 호버시 부드럽게 크기 조절 */
+}
+
+.album-item .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 아이콘을 이미지의 중앙에 위치시킴 */
+    opacity: 0; /* 기본적으로 보이지 않음 */
+    font-size: 30px;
+    color: white;
+    transition: opacity 0.3s ease;
+}
+
+.album-item:hover img {
+    filter: brightness(0.5); /* 호버 시 이미지 어두워지기 */
+    transform: scale(1.05); /* 호버 시 이미지 확대 */
+}
+
+.album-item:hover .icon {
+    opacity: 1; /* 호버 시 아이콘 보이게 */
+}
+
+        .album-item .title {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .album-item .release-date {
+            font-size: 12px;
+            color: #ffffff;
+            margin-bottom: 50px;
+            text-align: left;
+        }
+
+        /* 하단 플레이어 바 */
+        .player-bar {
+            background-color: rgb(50, 50, 50);
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .player-bar .player-icon {
+            width: 50px;  /* 이미지 크기 */
+            height: 50px; /* 이미지 크기 */
+            margin-right: 30px; /* 이미지와 다른 요소 간 간격 */
+            margin-left: 10px;
+            border: 2px solid #ffffff;
+        }
+
+        .play-btn {
+            size: 200%;
+        }
+
+        /* 진한 구분선 */
+        .divider {
+            width: 2px;
+            height: 25px;
+            background-color: #444;
+        }
+
+        .fa-solid fa-circle-play {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* 재생바 */
+        .progress-container {
+            flex-grow: 1;
+            height: 5px;
+            background-color: #333;
+            border-radius: 5px;
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .progress-bar {
+            width: 40%; /* 진척도 (예시로 40% 설정) */
+            height: 100%;
+            background-color: #ff0066;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* 시간 표시 */
+        .time {
+            font-size: 12px;
+            color: #bbb;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 사이드 메뉴 -->
+    <nav id="sidebar">
+        <div class="profile">
+            <a href='index.html'><img src="1x/logo.png"></a>
+            <img src="profile.jpg" alt="김민서 프로필 이미지" class="profile-image">
+            <p>김민서 ▼</p>
+            <button class="subscribe-btn">마이페이지</button>
+        </div>
+        <ul class="menu">
+            <li><i class="fa-solid fa-trophy"></i>&ensp; <a href='look.html'>둘러보기</a></li>
+            <li><i class="fa-solid fa-music"></i>&ensp; <a href='reco.html'>추천</a></li>
+            <li><i class="fa-solid fa-snowflake"></i>&ensp; <a href='thema.html'>테마</a></li>
+            <li><i class="fa-solid fa-book"></i>&ensp; <a href='mag.html'>매거진</a></li>
+            <li class="menu-item-home"><i class="fa-solid fa-heart" style="color: #ff0066"></i>&ensp; <a href='my.html'>마이뮤직</a></li>
+        </ul>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="main-content">
+        <header class="top-banner">
+            <p>김민서님의 음악 취향</p>
+        </header>
+        
+    <section class="highlight">
+        <section class="album-section">
+            <div class="highlight-text"><h2>&emsp;이번달에 많이 들은 음악&emsp;></h2></div>
+            <div class="album-grid">
+                <div class="album-item">
+                    <img src="whi.jpg" alt="앨범 1">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">Flowers</p>
+                    <p class="release-date">aespa</p>
+                </div>
+                <div class="album-item">
+                    <img src="brat.png" alt="앨범 2">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">365</p>
+                    <p class="release-date">Charli xcx</p>
+                </div>
+                <div class="album-item">
+                    <img src="new.jpg" alt="앨범 3">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">Attention (250 remix)</p>
+                    <p class="release-date">Newjeans</p>
+                </div>
+            </div>
+        </section>
+    </section>
+    </div>
+    <br>
+
+    <div id="main-content">
+    <section class="highlight">
+        <section class="album-section">
+            <div class="highlight-text"><h2>&emsp;김민서님의 음악 취향 #몽환&emsp;></h2></div>
+            <div class="album-grid">
+                <div class="album-item">
+                    <img src="sza.jpg" alt="앨범 1">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">Snooze</p>
+                    <p class="release-date">SZA</p>
+                </div>
+                <div class="album-item">
+                    <img src="joji.jpg" alt="앨범 2">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">SLOW DANCING IN THE DARK</p>
+                    <p class="release-date">Joji</p>
+                </div>
+                <div class="album-item">
+                    <img src="gri.jpg" alt="앨범 3">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">Genesis</p>
+                    <p class="release-date">Grimes</p>
+                </div>
+            </div>
+        </section>
+    </section>
+    </div>
+    <br>
+
+    <div id="main-content">    
+    <section class="highlight">
+        <section class="album-section">
+            <div class="highlight-text"><h2>&emsp;김민서님의 음악 취향 #외힙&emsp;></h2></div>
+            <div class="album-grid">
+                <div class="album-item">
+                    <img src="infi.png" alt="앨범 1">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">infinity (888)</p>
+                    <p class="release-date">XXXTENTACION</p>
+                </div>
+                <div class="album-item">
+                    <img src="ken.jpg" alt="앨범 2">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">LOVE. (Feat. Zacari)</p>
+                    <p class="release-date">Kendrick Lamar</p>
+                </div>
+                <div class="album-item">
+                    <img src="kiss.jpg" alt="앨범 3">
+                    <i class="fa-solid fa-play icon"></i>
+                    <p class="title">Kiss Kiss</p>
+                    <p class="release-date">Chris Brown(ft. Tpain)</p>
+                </div>
+            </div>
+        </section>
+    </section>
+    </div>
+
+    <!-- 하단 재생바 -->
+    <footer class="player-bar">
+        <img src="apt.jpg" alt="재생바 이미지" class="player-icon">
+        <!-- 재생/일시정지 버튼 -->
+        &emsp;<i class="fa-solid fa-backward-step"></i>&emsp;
+        <i class="fa-solid fa-circle-play"></i>&emsp;
+        <i class="fa-solid fa-forward-step"></i>&emsp;&emsp;&emsp;
+
+        <!-- 진한 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 재생바 -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <!-- 시간 표시 -->
+        <div class="time">
+            <span>01:30</span> / <span>03:45</span>
+        </div>
+    </footer>
+</body>
+</html>

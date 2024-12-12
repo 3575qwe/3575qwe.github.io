@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Platform</title>
+    <script src="https://kit.fontawesome.com/7cb83bc021.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary-color: #ff0066;
+            --text-color: white;
+            --background-color: rgb(0, 0, 0);
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-image: url('18.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .profile {
+            align-items: center; /* 이미지와 텍스트를 세로로 중앙 정렬 */
+            text-align: center;
+        }
+
+        .profile .profile-image {
+            margin-top: 30px;
+            width: 50px;  /* 이미지 크기 */
+            height: 50px; /* 이미지 크기 */
+            border-radius: 50%; /* 원형으로 만들기 */
+            margin-right: 10px; /* 이미지와 텍스트 간의 간격 */
+        }
+
+        #sidebar {
+            width: 240px;
+            height: 100vh;
+            background-color: rgb(0, 0, 0);
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #sidebar .profile {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #sidebar .subscribe-btn {
+            background-color: #ff0066;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #sidebar .menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar .menu li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+
+        #sidebar .menu li a {
+            color: rgb(255, 255, 255); /* 파란색으로 변경 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+
+        #sidebar .menu .menu-item-home a {
+            color: #ff0066;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        #main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        .top-banner {
+            background-color: rgba(255, 0, 102, 0.8);
+            height: 50px; /* 배너 높이를 고정 */
+            padding: 10px;
+            text-align: left;
+            font-size: 20px;
+        }
+
+        .carousel-container {
+    display: inline-block; /* 세 개의 캐러셀을 가로로 배치 */
+    margin-right: 20px; /* 각 캐러셀 간의 간격 */
+    padding-top: 100px;
+    padding-left: 120px; /* 왼쪽에 여백 추가 */
+}
+
+        .carousel {
+            width: 300px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+        }
+
+        .slides {
+            display: flex;
+            animation: slide 12s infinite;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            33.33% { transform: translateX(-100%); }
+            66.66% { transform: translateX(-200%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* 하단 플레이어 바 */
+        .player-bar {
+            background-color: rgb(50, 50, 50);
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .player-bar .player-icon {
+            width: 50px;  /* 이미지 크기 */
+            height: 50px; /* 이미지 크기 */
+            margin-right: 30px; /* 이미지와 다른 요소 간 간격 */
+            margin-left: 10px;
+            border: 2px solid #ffffff;
+        }
+
+        .play-btn {
+            size: 200%;
+        }
+
+        /* 진한 구분선 */
+        .divider {
+            width: 2px;
+            height: 25px;
+            background-color: #444;
+        }
+
+        .fa-solid fa-circle-play {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* 재생바 */
+        .progress-container {
+            flex-grow: 1;
+            height: 5px;
+            background-color: #333;
+            border-radius: 5px;
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .progress-bar {
+            width: 40%; /* 진척도 (예시로 40% 설정) */
+            height: 100%;
+            background-color: #ff0066;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* 시간 표시 */
+        .time {
+            font-size: 12px;
+            color: #bbb;
+            margin-left: 10px;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- 사이드 메뉴 -->
+    <nav id="sidebar">
+        <div class="profile">
+            <a href="index.html"><img src="1x/logo.png" alt="로고"></a>
+            <img src="profile.jpg" alt="김민서 프로필 이미지" class="profile-image">
+            <p>김민서 ▼</p>
+            <button class="subscribe-btn">마이페이지</button>
+        </div>
+        <ul class="menu">
+            <li><i class="fa-solid fa-trophy"></i>&ensp; <a href="look.html">둘러보기</a></li>
+            <li class="menu-item-home"><i class="fa-solid fa-music" style="color: #ff0066"></i>&ensp; <a href="reco.html">추천</a></li>
+            <li><i class="fa-solid fa-snowflake"></i>&ensp; <a href="thema.html">테마</a></li>
+            <li><i class="fa-solid fa-book"></i>&ensp; <a href="mag.html">매거진</a></li>
+            <li><i class="fa-solid fa-heart"></i>&ensp; <a href="my.html">마이뮤직</a></li>
+        </ul>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="main-content">
+        <header class="top-banner">
+            <p>김민서님을 위한 오늘의 추천곡</p>
+        </header>
+
+
+        <!-- 이미지 슬라이더 -->
+    <div class="carousel-container">
+        <h3>힘든 하루를 마무리하는 음악</h3>
+        <div class="carousel">
+            <div class="slides">
+                <div class="slide">
+                    <img src="reco1.jpg" alt="앨범 1">
+                    <div class="song-title">Sleep Well</div>
+                </div>
+                <div class="slide">
+                    <img src="reco2.jpg" alt="앨범 2">
+                    <div class="song-title">해바라기</div>
+                </div>
+                <div class="slide">
+                    <img src="reco3.jpg" alt="앨범 3">
+                    <div class="song-title">seasons</div>
+                </div>
+            </div>
+        </div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </div>
+
+    <div class="carousel-container">
+        <h3>과제할 때, 신나는 노동요</h3>
+        <div class="carousel">
+            <div class="slides">
+                <div class="slide">
+                    <img src="reco11.jpg" alt="앨범 1">
+                    <div class="song-title">Universe</div>
+                </div>
+                <div class="slide">
+                    <img src="reco12.jpg" alt="앨범 2">
+                    <div class="song-title">Players</div>
+                </div>
+                <div class="slide">
+                    <img src="reco13.jpg" alt="앨범 3">
+                    <div class="song-title">AEAO</div>
+                </div>
+            </div>
+        </div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </div>
+
+    <div class="carousel-container">
+        <h3>남에게 들려주고 싶은 음악</h3>
+        <div class="carousel">
+            <div class="slides">
+                <div class="slide">
+                    <img src="reco21.jpg" alt="앨범 1">
+                    <div class="song-title">Movie</div>
+                </div>
+                <div class="slide">
+                    <img src="reco22.jpg" alt="앨범 2">
+                    <div class="song-title">Boy</div>
+                </div>
+                <div class="slide">
+                    <img src="reco23.jpg" alt="앨범 3">
+                    <div class="song-title">아까워</div>
+                </div>
+            </div>
+        </div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </div>
+    
+    </div>
+
+    <!-- 하단 재생바 -->
+    <footer class="player-bar">
+        <img src="apt.jpg" alt="재생바 이미지" class="player-icon">
+        <!-- 재생/일시정지 버튼 -->
+        &emsp;<i class="fa-solid fa-backward-step"></i>&emsp;
+        <i class="fa-solid fa-circle-play"></i>&emsp;
+        <i class="fa-solid fa-forward-step"></i>&emsp;&emsp;&emsp;
+
+        <!-- 진한 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 재생바 -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <!-- 시간 표시 -->
+        <div class="time">
+            <span>01:30</span> / <span>03:45</span>
+        </div>
+    </footer>
+</body>
+</html>
